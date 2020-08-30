@@ -1,0 +1,12 @@
+language: bash
+sudo: true
+addons:
+  apt:
+    packages:
+      - shellcheck
+before_install:
+  - sudo apt update
+script:
+  - shellcheck -V && shellcheck **/*.sh
+matrix:
+  fast_finish: true
