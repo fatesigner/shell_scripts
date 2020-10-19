@@ -51,7 +51,7 @@ function installCer(){
   apt install socat -y
   curl https://get.acme.sh | sh
   ~/.acme.sh/acme.sh --upgrade --auto-upgrade
-  ~/.acme.sh/acme.sh --issue --debug --dns "$dns" -d "$host"
+  ~/.acme.sh/acme.sh --issue --debug --dns "$dns" -d "$host" --keylength ec-256
 }
 
 if [ "${host}" ]; then
