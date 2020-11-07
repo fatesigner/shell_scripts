@@ -24,17 +24,17 @@ export DP_Key="sADDsdasdgdsf"
 
 ```bash
 bash ./certification.sh \
--d        [your host name]  \
---dns     [dns_ali or dns_dp]
+--dns     [dns_ali or dns_dp] \
+-d        [your host name]
 
 # example
-bash ./certification.sh -d asd.xyz.com --dns dns_ali
+bash ./certification.sh --dns dns_ali -d xyz.com -d *.xyz.com
 
 # if success, the following file will be output.
-Your cert is in  /root/.acme.sh/asd.xyz.com/asd.xyz.com.cer 
-Your cert key is in  /root/.acme.sh/asd.xyz.com/asd.xyz.com.key 
-The intermediate CA cert is in  /root/.acme.sh/asd.xyz.com/ca.cer 
-And the full chain certs is there:  /root/.acme.sh/asd.xyz.com/fullchain.cer
+Your cert is in  /root/.acme.sh/xyz.com_ecc/asd.xyz.com.cer 
+Your cert key is in  /root/.acme.sh/xyz.com_ecc/asd.xyz.com.key 
+The intermediate CA cert is in  /root/.acme.sh/xyz.com_ecc/ca.cer 
+And the full chain certs is there:  /root/.acme.sh/xyz.com_ecc/fullchain.cer
 ```
 
 ## Tested OS
