@@ -17,31 +17,31 @@ UUID=$(cat /proc/sys/kernel/random/uuid)
 
 while [[ $# -ge 1 ]]; do
   case $1 in
-    -u|--uuid)
-      shift
-      UUID="$1"
-      shift
-      ;;
-    -d)
-      shift
-      host="$1"
-      shift
-      ;;
-    --dns)
-      shift
-      dns="$1"
-      shift
-      ;;
-    *)
-      if [[ "$1" != 'error' ]]; then echo -ne "\nInvaild option: '$1'\n\n"; fi
-      echo -ne " Usage:\n\tbash $(basename "$0")\t-u/--uuid [\033[33m\033[04mclient id\033[0m]\n\t\t\t\t-h/--host [\033[33m\033[04mhttps host name\033[0m]\n\t\t\t\t-h/--dns [\033[33m\033[04mDNS API\033[0m]\n\t\t\t\t\n"
-      exit 1;
-      ;;
-    esac
-  done
+  -u | --uuid)
+    shift
+    UUID="$1"
+    shift
+    ;;
+  -d)
+    shift
+    host="$1"
+    shift
+    ;;
+  --dns)
+    shift
+    dns="$1"
+    shift
+    ;;
+  *)
+    if [[ "$1" != 'error' ]]; then echo -ne "\nInvaild option: '$1'\n\n"; fi
+    echo -ne " Usage:\n\tbash $(basename "$0")\t-u/--uuid [\033[33m\033[04mclient id\033[0m]\n\t\t\t\t-h/--host [\033[33m\033[04mhttps host name\033[0m]\n\t\t\t\t-h/--dns [\033[33m\033[04mDNS API\033[0m]\n\t\t\t\t\n"
+    exit 1
+    ;;
+  esac
+done
 
 # check if run as root
-[[ "$EUID" -ne '0' ]] && echo "Error:This script must be run as root!" && exit 1;
+[[ "$EUID" -ne '0' ]] && echo "Error:This script must be run as root!" && exit 1
 
 echo -e "${Info} UUID：$UUID"
 echo -e "${Info} host：$host"
@@ -55,7 +55,7 @@ fi
 
 # read -t 30 -p "input the host:" host
 
-function installV2ray(){
+function installV2ray() {
   echo -e "${Info} install v2Ray"
   if [ ! -f "/usr/local/etc/v2ray/config.json" ]; then
     apt update
@@ -64,7 +64,7 @@ function installV2ray(){
     bash install-release.sh
   fi
   # config
-  cat <<EOT > /usr/local/etc/v2ray/config.json
+  cat <<EOT >/usr/local/etc/v2ray/config.json
 {
   "log": {
     "access": "/var/log/v2ray/access.log",
@@ -129,7 +129,7 @@ EOT
   useradd v2ray -s /usr/sbin/nologin
   chown -R v2ray:v2ray /var/log/v2ray
   #修改v2ray.service文件，加入User和Group两项
-  cat <<EOT > /etc/systemd/system/v2ray.service
+  cat <<EOT >/etc/systemd/system/v2ray.service
 [Unit]
 Description=V2Ray - A unified platform for anti-censorship
 Documentation=https://v2ray.com https://guide.v2fly.org
@@ -168,7 +168,7 @@ EOT
 
 }
 
-function installHaproxy(){
+function installHaproxy() {
   if [ ! -f "/etc/haproxy/haproxy.cfg" ]; then
     apt install haproxy
   fi
@@ -176,8 +176,8 @@ function installHaproxy(){
     # 为 haproxy 生成证书
     mkdir -p /etc/haproxy/ssl/
   fi
-  cat /root/.acme.sh/"$host"/fullchain.cer /root/.acme.sh/"$host"/"$host".key > /etc/haproxy/ssl/"$host".pem
-  cat <<EOT > /etc/haproxy/haproxy.cfg
+  cat /root/.acme.sh/"$host"/fullchain.cer /root/.acme.sh/"$host"/"$host".key >/etc/haproxy/ssl/"$host".pem
+  cat <<EOT >/etc/haproxy/haproxy.cfg
 global
     log /dev/log local0
     log /dev/log local1 notice
@@ -227,12 +227,12 @@ backend vmess
 EOT
 }
 
-function installNginx(){
+function installNginx() {
   echo -e "${Info} install nginx"
   if [ ! -f "/etc/nginx/nginx.conf" ]; then
     apt install nginx
   fi
-  cat <<EOT > /etc/nginx/nginx.conf
+  cat <<EOT >/etc/nginx/nginx.conf
 # For more formation on configuration, see:
 #   * Official English Documentation: http://nginx.org/en/docs/
 #   * Official Russian Documentation: http://nginx.org/ru/docs/
@@ -301,7 +301,7 @@ http {
 EOT
 }
 
-function installCer(){
+function installCer() {
   if [ ! -f "/root/.acme.sh/$host/$host.key" ]; then
     bash <(curl -L -s https://raw.githubusercontent.com/fatesigner/shell_scripts/master/certification/certification.sh) -d "$host" --dns "$dns"
   fi
@@ -313,7 +313,7 @@ if [ "${host}" ]; then
   installV2ray
   installHaproxy
   installNginx
-  
+
   if [ ! -x "/var/lib/haproxy/v2ray" ]; then
     mkdir /var/lib/haproxy/v2ray
   fi
