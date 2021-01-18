@@ -150,7 +150,7 @@ function installCer(){
 	  # 转移证书至 nginx
     mkdir -p /usr/local/etc/v2ray/ssl/
 
-	  ~/.acme.sh/acme.sh --install-cert -d "$host" \
+	  ~/.acme.sh/acme.sh --install-cert --ecc -d "$host" \
     --keypath /usr/local/etc/v2ray/ssl/v2ray.key  \
     --fullchainpath /usr/local/etc/v2ray/ssl/v2ray.crt
 
